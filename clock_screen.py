@@ -38,7 +38,6 @@ class ClockScreen(BaseScreen):
             width, height = self.team_logo.get_size()
             self.team_logo = pygame.transform.scale(self.team_logo, (int(width * 0.45), int(height * 0.45)))
         else:
-            #self.team_logo = pygame.transform.scale_by(self.team_logo, .5)
             width, height = self.team_logo.get_size()
             self.team_logo = pygame.transform.scale(self.team_logo, (int(width * 0.5), int(height * 0.5)))
 
