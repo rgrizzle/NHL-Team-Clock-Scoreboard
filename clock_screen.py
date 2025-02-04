@@ -5,6 +5,7 @@ from constants import *
 from game_utils import get_prev_and_next_game_info
 from weather_utils import get_weather  
 from base_screen import BaseScreen
+import os
 
 
 
@@ -28,9 +29,9 @@ class ClockScreen(BaseScreen):
         
         # Load and scale logo
         if TEAM_ABBR == 'SJS':
-            team_logo_path = "team_logos\SJS_logo.png"
+            team_logo_path = os.path.join("team_logos", "SJS_logo.png") 
         else:
-            team_logo_path = f"team_logos\{TEAM_ABBR}_logo.svg"
+            team_logo_path = os.path.join("team_logos", f"{TEAM_ABBR}_logo.svg")
         self.team_logo = pygame.image.load(team_logo_path)
         
         if TEAM_ABBR == 'SJS':
