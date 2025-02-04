@@ -1,6 +1,6 @@
 import pygame
 import requests
-from datetime import datetime
+from datetime import datetime, timezone
 from constants import *  
 from game_utils import get_prev_and_next_game_info
 from weather_utils import get_weather  
@@ -17,7 +17,7 @@ class ClockScreen(BaseScreen):
         self.weather_text = "Loading..."
         self.team_abbr = TEAM_ABBR
         self.local_tz = LOCAL_TIMEZONE
-        self.prev_game, self.next_game = get_prev_and_next_game_info(TEAM_ABBR, LOCAL_TIMEZONE)
+        self.prev_game, self.next_game, self.current_game = get_prev_and_next_game_info(TEAM_ABBR, LOCAL_TIMEZONE)
 
     def load_resources(self):
         # Load fonts using constants
@@ -32,7 +32,12 @@ class ClockScreen(BaseScreen):
         else:
             team_logo_path = f"team_logos\{TEAM_ABBR}_logo.svg"
         self.team_logo = pygame.image.load(team_logo_path)
-        self.team_logo = pygame.transform.scale(self.team_logo, (290, 290))
+        
+        if TEAM_ABBR == 'SJS':
+            self.team_logo = pygame.transform.scale(self.team_logo, (290, 290))
+        else:
+            self.team_logo = pygame.transform.scale_by(self.team_logo, .5)
+        
         
 
     def draw(self):
@@ -73,6 +78,15 @@ class ClockScreen(BaseScreen):
         next_game_date = self.next_game['date']
         next_game_time = self.next_game['time']
         next_game_opponent = self.next_game['opponent']
+        next_game_start_time_local = self.next_game['start_time_utc']
+        next_game_countdown = next_game_start_time_local - datetime.now(timezone.utc)
+        # Convert countdown to HH:MM:SS format
+        hours, remainder = divmod(int(next_game_countdown.total_seconds()), 3600)
+        minutes, seconds = divmod(remainder, 60)
+        formatted_countdown = f"{hours:02}:{minutes:02}:{seconds:02}"
+        seconds_until_next_game = next_game_countdown.total_seconds()
+        if seconds_until_next_game < 1800:
+            self.current_game = self.next_game
 
         # Render the game information
         result_surface = self.game_font.render(prev_game_result_text, True, result_color)
@@ -81,6 +95,7 @@ class ClockScreen(BaseScreen):
         next_game_date_surface = self.game_font.render(next_game_date, True, TEXT_COLOR)
         next_game_time_surface = self.game_font.render(next_game_time, True, TEXT_COLOR)
         next_game_opponent_surface = self.game_font.render(next_game_opponent, True, TEXT_COLOR)
+        next_game_countdown_surface = self.game_font.render(str(seconds_until_next_game), True, TEXT_COLOR)
 
         # Centering calculations
         time_rect = time_surface.get_rect(center=(screen_width // 2, screen_height // 4 + 50))
@@ -89,12 +104,13 @@ class ClockScreen(BaseScreen):
         logo_rect = self.team_logo.get_rect(center=(screen_width // 2, screen_height // 2 + 115))
         
         # Positioning the game information
-        result_rect = result_surface.get_rect(center=(screen_width // 6 - 10, screen_height // 2 + 80))
+        result_rect = result_surface.get_rect(center=(screen_width // 6 , screen_height // 2 + 80))
         prev_game_home_score_rect = prev_game_home_score_surface.get_rect(center=(screen_width // 6, screen_height // 2 + 115))
         prev_game_away_score_rect = prev_game_away_score_surface.get_rect(center=(screen_width // 6, screen_height // 2 + 150))
         next_game_date_rect = next_game_date_surface.get_rect(center=((screen_width // 2 + 260), screen_height // 2 + 80))
         next_game_time_rect = next_game_time_surface.get_rect(center=((screen_width // 2 + 260), screen_height // 2 + 115))
         next_game_opponent_rect = next_game_opponent_surface.get_rect(center=((screen_width // 2 + 260), screen_height // 2 + 150))
+        next_game_countdown_rect = next_game_countdown_surface.get_rect(center=((screen_width // 2 + 260), screen_height // 2 + 40))
 
         # Blit (draw) everything onto the screen
         screen.blit(time_surface, time_rect)
@@ -107,6 +123,8 @@ class ClockScreen(BaseScreen):
         screen.blit(next_game_date_surface, next_game_date_rect)
         screen.blit(next_game_time_surface, next_game_time_rect)
         screen.blit(next_game_opponent_surface, next_game_opponent_rect)
+        #screen.blit(next_game_countdown_surface, next_game_countdown_rect)
+        
 
         # Update the display
         pygame.display.flip()

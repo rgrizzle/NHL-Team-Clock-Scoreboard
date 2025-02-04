@@ -13,7 +13,7 @@ WEATHER_FONT_SIZE = 50
 GAME_FONT_SIZE = 30
 
 # Team Abbreviation
-TEAM_ABBR = "TOR"
+TEAM_ABBR = "NSH"
 
 # Local Timezone
 LOCAL_TIMEZONE = "America/Los_Angeles"

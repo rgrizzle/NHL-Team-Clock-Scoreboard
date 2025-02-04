@@ -2,7 +2,7 @@ import pygame
 import sys
 from screen_manager import ScreenManager
 
-class SharksClockApp:
+class NHLClockApp:
     def __init__(self):
         pygame.init()
         self.manager = ScreenManager()

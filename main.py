@@ -3,8 +3,8 @@ import pygame
 import sys
 from constants import *
 from screen_manager import ScreenManager
-from clock import SharksClockApp
+from clock import NHLClockApp
 
 if __name__ == "__main__":
-    app = SharksClockApp()
+    app = NHLClockApp()
     app.run()

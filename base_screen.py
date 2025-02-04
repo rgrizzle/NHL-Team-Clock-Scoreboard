@@ -7,7 +7,7 @@ class BaseScreen:
     def handle_event(self, event):
         pass
         
-    def update(self):
+    def update(self, current_game=None):  # Accept optional argument
         pass
         
     def draw(self):
