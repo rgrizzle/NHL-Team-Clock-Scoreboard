@@ -43,11 +43,13 @@ class ScoreBoardScreen(BaseScreen):
             # Load logos only when we have valid team abbreviations
             self.home_logo_path = get_logo(self.home_team_abbr)
             self.home_logo = pygame.image.load(self.home_logo_path)
-            self.home_logo = pygame.transform.scale_by(self.home_logo, .5)
+            width, height = self.home_logo.get_size()
+            self.home_logo = pygame.transform.scale(self.home_logo, (int(width * 0.5), int(height * 0.5)))
             
             self.away_logo_path = get_logo(self.away_team_abbr)
             self.away_logo = pygame.image.load(self.away_logo_path)
-            self.away_logo = pygame.transform.scale_by(self.away_logo, .5)
+            width, height = self.away_logo.get_size()
+            self.away_logo = pygame.transform.scale(self.away_logo, (int(width * 0.5), int(height * 0.5)))
 
             if not self.pregame_info_fetched:
                 get_pregame_info(self.home_team_abbr, self.away_team_abbr)
