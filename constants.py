@@ -13,7 +13,7 @@ WEATHER_FONT_SIZE = 50
 GAME_FONT_SIZE = 30
 
 # Team Abbreviation
-TEAM_ABBR = "NSH"
+TEAM_ABBR = "SJS"
 
 # Local Timezone
 LOCAL_TIMEZONE = "America/Los_Angeles"
