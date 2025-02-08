@@ -1,3 +1,3 @@
 __pycache__/
 venv/
-team_logos/
+team_logos/"__pycache__/" 
